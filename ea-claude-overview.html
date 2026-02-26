@@ -3,43 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EA-Claude (Data) -- Feature Overview</title>
+    <title>EA-Claude (Data) -- ClaudeClaw Evolution</title>
     <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap">
     <style>
         :root {
-            --bg: #06080d;
+            --bg-primary: #06080d;
+            --bg-secondary: #0c1018;
             --bg-card: rgba(12, 20, 35, 0.85);
-            --bg-card-hover: rgba(15, 25, 45, 0.95);
-            --text: #e8edf5;
-            --text-dim: #6b7a94;
+            --text-primary: #e8edf5;
+            --text-secondary: #8b95a8;
+            --text-dim: #4d5a70;
             --accent: #00d4ff;
             --accent-glow: rgba(0, 212, 255, 0.15);
             --highlight: #ff6b35;
-            --green: #00e676;
+            --success: #00e676;
             --amber: #ffa726;
-            --indigo: #818cf8;
-            --grid: rgba(0, 212, 255, 0.03);
+            --border: rgba(0, 212, 255, 0.12);
             --font-display: 'Clash Display', sans-serif;
             --font-body: 'Satoshi', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            font-family: var(--font-body);
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
+        html {
+            scroll-behavior: smooth;
         }
 
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Subtle grid background */
         body::before {
             content: '';
             position: fixed;
             inset: 0;
             background-image:
-                linear-gradient(var(--grid) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+                linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
             background-size: 50px 50px;
             z-index: 0;
             pointer-events: none;
@@ -48,16 +52,18 @@
         .container {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 3rem 2rem;
+            padding: 0 clamp(1rem, 4vw, 3rem);
             position: relative;
             z-index: 1;
         }
 
-        /* Hero */
+        /* -- Hero -- */
         .hero {
+            padding: clamp(3rem, 8vw, 6rem) 0 clamp(2rem, 5vw, 4rem);
             text-align: center;
-            padding: 4rem 0 3rem;
+            border-bottom: 1px solid var(--border);
         }
+
         .hero-label {
             font-size: 0.75rem;
             text-transform: uppercase;
@@ -66,136 +72,221 @@
             font-weight: 600;
             margin-bottom: 1rem;
         }
+
         .hero h1 {
             font-family: var(--font-display);
-            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-size: clamp(2rem, 5vw, 3.5rem);
             font-weight: 700;
             line-height: 1.1;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
+
         .hero h1 span {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--indigo) 100%);
+            background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+
         .hero .subtitle {
-            color: var(--text-dim);
-            font-size: 1.1rem;
-            max-width: 600px;
+            font-size: clamp(0.9rem, 1.5vw, 1.15rem);
+            color: var(--text-secondary);
+            max-width: 700px;
             margin: 0 auto;
         }
 
-        /* Stats bar */
-        .stats-bar {
+        .hero-meta {
             display: flex;
             justify-content: center;
-            gap: 3rem;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid rgba(0, 212, 255, 0.08);
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
         }
-        .stat { text-align: center; }
-        .stat-value {
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat .number {
             font-family: var(--font-display);
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--accent);
         }
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-dim);
+
+        .hero-stat .label {
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        /* Section headers */
-        .section-header {
-            margin: 3rem 0 1.5rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid rgba(0, 212, 255, 0.08);
-        }
-        .section-header h2 {
-            font-family: var(--font-display);
-            font-size: 1.6rem;
-            font-weight: 600;
-        }
-        .section-header .section-sub {
+            letter-spacing: 0.12em;
             color: var(--text-dim);
-            font-size: 0.85rem;
-            margin-top: 0.25rem;
+            margin-top: 0.2rem;
         }
 
-        /* Comparison table */
-        .comparison {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
+        /* -- Section Headers -- */
+        .section {
+            padding: clamp(2.5rem, 5vw, 4rem) 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-header {
             margin-bottom: 2rem;
         }
-        .col-card {
-            background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-        .col-card.original { border-top: 3px solid var(--text-dim); }
-        .col-card.added { border-top: 3px solid var(--accent); }
-        .col-card h3 {
-            font-family: var(--font-display);
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-        }
-        .col-card.original h3 { color: var(--text-dim); }
-        .col-card.added h3 { color: var(--accent); }
-        .col-card ul {
-            list-style: none;
-            padding: 0;
-        }
-        .col-card li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            font-size: 0.9rem;
-            color: var(--text);
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-        }
-        .col-card li:last-child { border-bottom: none; }
-        .col-card li .icon { flex-shrink: 0; font-size: 0.8rem; margin-top: 2px; }
-        .col-card.original .icon { color: var(--text-dim); }
-        .col-card.added .icon { color: var(--accent); }
-        .col-card li .detail {
-            display: block;
-            color: var(--text-dim);
-            font-size: 0.78rem;
-            margin-top: 2px;
+
+        .section-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
 
-        /* Feature cards */
-        .features-grid {
+        .section h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+            font-weight: 600;
+        }
+
+        /* -- Comparison Table -- */
+        .comparison-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .col-header {
+            padding: 1rem 1.5rem;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .col-header.original {
+            background: rgba(255, 255, 255, 0.03);
+            border-right: 1px solid var(--border);
+        }
+
+        .col-header.added {
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .col-header .tag {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .col-header.original .tag {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-secondary);
+        }
+
+        .col-header.added .tag {
+            background: rgba(0, 212, 255, 0.15);
+            color: var(--accent);
+        }
+
+        .compare-row {
+            display: contents;
+        }
+
+        .compare-cell {
+            padding: 0.9rem 1.5rem;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .compare-cell.left {
+            border-right: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .compare-cell.right {
+            color: var(--text-primary);
+        }
+
+        .compare-cell .feature {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .compare-cell.left .feature {
+            color: var(--text-secondary);
+        }
+
+        .compare-cell .detail {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+        }
+
+        .compare-cell.right .detail {
+            color: var(--text-secondary);
+        }
+
+        .new-badge {
+            display: inline-block;
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 1px 6px;
+            border-radius: 3px;
+            background: rgba(0, 230, 118, 0.15);
+            color: var(--success);
+            margin-left: 0.4rem;
+            vertical-align: middle;
+            font-weight: 600;
+        }
+
+        .enhanced-badge {
+            display: inline-block;
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 1px 6px;
+            border-radius: 3px;
+            background: rgba(255, 167, 38, 0.15);
+            color: var(--amber);
+            margin-left: 0.4rem;
+            vertical-align: middle;
+            font-weight: 600;
+        }
+
+        /* -- Integration Cards -- */
+        .integrations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 1rem;
         }
-        .feature-card {
+
+        .integration-card {
             background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 1.25rem;
-            transition: border-color 0.3s ease, background 0.3s ease;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            transition: border-color 0.3s ease;
         }
-        .feature-card:hover {
-            border-color: rgba(0, 212, 255, 0.15);
-            background: var(--bg-card-hover);
+
+        .integration-card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
         }
-        .feature-card .card-header {
+
+        .integration-card .card-header {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            margin-bottom: 0.6rem;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
         }
-        .feature-card .card-icon {
+
+        .integration-card .icon {
             width: 36px;
             height: 36px;
             border-radius: 8px;
@@ -205,461 +296,622 @@
             font-size: 1.1rem;
             flex-shrink: 0;
         }
-        .feature-card h4 {
+
+        .integration-card h3 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .integration-card .desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .integration-card .tasks {
+            list-style: none;
+            padding: 0;
+        }
+
+        .integration-card .tasks li {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            padding: 0.25rem 0;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .integration-card .tasks li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-family: monospace;
+            font-size: 0.7rem;
+        }
+
+        /* Color-coded icons */
+        .icon-blue { background: rgba(0, 212, 255, 0.12); color: var(--accent); }
+        .icon-orange { background: rgba(255, 107, 53, 0.12); color: var(--highlight); }
+        .icon-green { background: rgba(0, 230, 118, 0.12); color: var(--success); }
+        .icon-amber { background: rgba(255, 167, 38, 0.12); color: var(--amber); }
+        .icon-purple { background: rgba(160, 120, 255, 0.12); color: #a078ff; }
+
+        /* -- Architecture Diagram -- */
+        .arch-diagram {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            font-family: 'Courier New', monospace;
+            font-size: clamp(0.55rem, 1vw, 0.78rem);
+            line-height: 1.6;
+            overflow-x: auto;
+            color: var(--text-secondary);
+            white-space: pre;
+        }
+
+        .arch-diagram .hl { color: var(--accent); }
+        .arch-diagram .or { color: var(--highlight); }
+        .arch-diagram .gr { color: var(--success); }
+        .arch-diagram .am { color: var(--amber); }
+        .arch-diagram .dim { color: var(--text-dim); }
+
+        /* -- Stats Bar -- */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-box .val {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-box .val.highlight { color: var(--highlight); }
+        .stat-box .val.green { color: var(--success); }
+        .stat-box .val.amber { color: var(--amber); }
+
+        .stat-box .stat-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-dim);
+            margin-top: 0.3rem;
+        }
+
+        /* -- Timeline -- */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            background: var(--bg-primary);
+        }
+
+        .timeline-item.highlight::before {
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+
+        .timeline-date {
+            font-size: 0.7rem;
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .timeline-title {
             font-family: var(--font-display);
             font-size: 0.95rem;
             font-weight: 600;
-        }
-        .feature-card p {
-            color: var(--text-dim);
-            font-size: 0.82rem;
-            line-height: 1.5;
-        }
-        .feature-card .tag {
-            display: inline-block;
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin-top: 0.5rem;
-            font-weight: 600;
-        }
-        .tag.live { background: rgba(0, 230, 118, 0.12); color: var(--green); }
-        .tag.built { background: rgba(0, 212, 255, 0.12); color: var(--accent); }
-        .tag.scheduled { background: rgba(255, 167, 38, 0.12); color: var(--amber); }
-        .tag.planned { background: rgba(129, 140, 248, 0.12); color: var(--indigo); }
-
-        .icon-bg-blue { background: rgba(0, 212, 255, 0.12); color: var(--accent); }
-        .icon-bg-green { background: rgba(0, 230, 118, 0.12); color: var(--green); }
-        .icon-bg-amber { background: rgba(255, 167, 38, 0.12); color: var(--amber); }
-        .icon-bg-highlight { background: rgba(255, 107, 53, 0.12); color: var(--highlight); }
-        .icon-bg-indigo { background: rgba(129, 140, 248, 0.12); color: var(--indigo); }
-
-        /* Integration list */
-        .integration-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 0.75rem;
-        }
-        .integration-item {
-            background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.04);
-            border-radius: 10px;
-            padding: 1rem 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        .integration-item .int-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-            background: rgba(0, 212, 255, 0.08);
-            color: var(--accent);
-        }
-        .integration-item .int-text h5 {
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-        .integration-item .int-text p {
-            font-size: 0.75rem;
-            color: var(--text-dim);
+            margin: 0.2rem 0;
         }
 
-        /* Tech stack */
-        .tech-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.75rem;
-        }
-        .tech-badge {
-            background: rgba(0, 212, 255, 0.06);
-            border: 1px solid rgba(0, 212, 255, 0.1);
-            border-radius: 6px;
-            padding: 4px 12px;
-            font-size: 0.75rem;
-            color: var(--text);
-            font-weight: 500;
-        }
-
-        /* Architecture diagram */
-        .arch-box {
-            background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 1.5rem 0;
-            text-align: center;
-        }
-        .arch-box pre {
-            font-family: 'SF Mono', 'Fira Code', monospace;
+        .timeline-desc {
             font-size: 0.78rem;
-            color: var(--text-dim);
-            line-height: 1.6;
-            text-align: left;
-            display: inline-block;
-            overflow-x: auto;
-            max-width: 100%;
+            color: var(--text-secondary);
         }
-        .arch-box pre .hl { color: var(--accent); }
-        .arch-box pre .hlw { color: var(--amber); }
-        .arch-box pre .hlg { color: var(--green); }
-        .arch-box pre .hlo { color: var(--highlight); }
 
-        /* Footer */
+        /* -- Footer -- */
         .footer {
+            padding: 3rem 0;
             text-align: center;
-            padding: 3rem 0 2rem;
-            border-top: 1px solid rgba(0, 212, 255, 0.06);
-            margin-top: 3rem;
-        }
-        .footer p {
             color: var(--text-dim);
-            font-size: 0.78rem;
+            font-size: 0.75rem;
         }
-        .footer a { color: var(--accent); text-decoration: none; }
 
-        /* Responsive */
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* -- Responsive -- */
         @media (max-width: 700px) {
-            .comparison { grid-template-columns: 1fr; }
-            .stats-bar { gap: 1.5rem; flex-wrap: wrap; }
-            .container { padding: 2rem 1.25rem; }
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            .col-header.original {
+                border-right: none;
+                border-bottom: none;
+            }
+            .compare-cell.left {
+                border-right: none;
+                border-bottom: none;
+                padding-bottom: 0.3rem;
+            }
+            .compare-cell.right {
+                padding-top: 0;
+            }
+            .hero-meta {
+                gap: 1rem;
+            }
+            .integrations-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
 
-        <!-- Hero -->
-        <div class="hero">
-            <div class="hero-label">M2AI / ClaudeClaw Fork</div>
-            <h1>EA-Claude <span>(Data)</span></h1>
-            <p class="subtitle">Chief of Staff AI running as a persistent Telegram service. Built on ClaudeClaw, extended into a multi-LLM operations hub for the ST Metro ecosystem.</p>
+<div class="container">
+
+    <!-- HERO -->
+    <header class="hero">
+        <div class="hero-label">M2AI / ST Metro Ecosystem</div>
+        <h1><span>EA-Claude (Data)</span></h1>
+        <p class="subtitle">
+            What started as an open-source Telegram-to-Claude bridge is now a Chief of Staff AI
+            running an autonomous software production ecosystem. Here's what changed.
+        </p>
+        <div class="hero-meta">
+            <div class="hero-stat">
+                <div class="number">17K+</div>
+                <div class="label">Lines Added</div>
+            </div>
+            <div class="hero-stat">
+                <div class="number">14</div>
+                <div class="label">Commits</div>
+            </div>
+            <div class="hero-stat">
+                <div class="number">12</div>
+                <div class="label">New Modules</div>
+            </div>
+            <div class="hero-stat">
+                <div class="number">5</div>
+                <div class="label">LLM Backends</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- COMPARISON -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-label">Before & After</div>
+            <h2>Original ClaudeClaw vs. EA-Claude (Data)</h2>
         </div>
 
-        <!-- Stats -->
+        <div class="comparison-grid">
+            <div class="col-header original">ClaudeClaw <span class="tag">Open Source</span></div>
+            <div class="col-header added">EA-Claude (Data) <span class="tag">M2AI Fork</span></div>
+
+            <!-- Row: Core -->
+            <div class="compare-cell left">
+                <div class="feature">Telegram Bot</div>
+                <div class="detail">Single-user Telegram bridge to Claude Code CLI</div>
+            </div>
+            <div class="compare-cell right">
+                <div class="feature">Chief of Staff AI <span class="enhanced-badge">Enhanced</span></div>
+                <div class="detail">Persistent operator with persona, Christensen filter for idea triage, project pipeline awareness</div>
+            </div>
+
+            <!-- Row: LLM -->
+            <div class="compare-cell left">
+                <div class="feature">Claude Only</div>
+                <div class="detail">All messages routed to Claude Code subprocess</div>
+            </div>
+            <div class="compare-cell right">
+                <div class="feature">Multi-LLM Router <span class="new-badge">New</span></div>
+                <div class="detail">@claude, @gemini, @perplexity, @ollama, @gpt prefix routing. Anti-monoculture signal diversity.</div>
+            </div>
+
+            <!-- Row: Memory -->
+            <div class="compare-cell left">
+                <div class="feature">SQLite + FTS5 Memory</div>
+                <div class="detail">Keyword search, salience decay, conversation recall</div>
+            </div>
+            <div class="compare-cell right">
+                <div class="feature">Memory + Dispatch Queue <span class="enhanced-badge">Enhanced</span></div>
+                <div class="detail">Original memory preserved. Added dispatch_queue table for async task management with worker routing.</div>
+            </div>
+
+            <!-- Row: Voice -->
+            <div class="compare-cell left">
+                <div class="feature">Voice I/O</div>
+                <div class="detail">Groq Whisper STT + ElevenLabs TTS</div>
+            </div>
+            <div class="compare-cell right">
+                <div class="feature">Voice I/O</div>
+                <div class="detail">Unchanged -- works as shipped</div>
+            </div>
+
+            <!-- Row: Scheduler -->
+            <div class="compare-cell left">
+                <div class="feature">Cron Scheduler</div>
+                <div class="detail">60-second tick loop, autonomous task execution</div>
+            </div>
+            <div class="compare-cell right">
+                <div class="feature">Scheduler + Telemetry <span class="enhanced-badge">Enhanced</span></div>
+                <div class="detail">Added JSONL telemetry per task execution, idempotent init (prevents duplicate intervals on 409 retries)</div>
+            </div>
+
+            <!-- Row: Media -->
+            <div class="compare-cell left">
+                <div class="feature">Photo/Doc Handling</div>
+                <div class="detail">Send a file, Claude processes it</div>
+            </div>
+            <div class="compare-cell right">
+                <div class="feature">Media + Video + Image Gen <span class="enhanced-badge">Enhanced</span></div>
+                <div class="detail">Added video support, HuggingFace image generation, GitHub raw URL hosting for persistent media</div>
+            </div>
+
+            <!-- Row: Skills -->
+            <div class="compare-cell left">
+                <div class="feature">Auto-load ~/.claude/skills/</div>
+                <div class="detail">Whatever skills you have installed just work</div>
+            </div>
+            <div class="compare-cell right">
+                <div class="feature">Custom Skills + Arcade MCP <span class="new-badge">New</span></div>
+                <div class="detail">Added Arcade MCP gateway (Linear, GitHub, Slack tools), social-media skill (Late API), agent-team-prompt, AWS services</div>
+            </div>
+
+            <!-- Row: Dashboard -->
+            <div class="compare-cell left">
+                <div class="feature">--</div>
+                <div class="detail">No dashboard</div>
+            </div>
+            <div class="compare-cell right">
+                <div class="feature">Data Dashboard <span class="new-badge">New</span></div>
+                <div class="detail">Live system dashboard: service health, git status across 10 repos, pipeline tracker, Soundwave operator review panel</div>
+            </div>
+
+            <!-- Row: Async -->
+            <div class="compare-cell left">
+                <div class="feature">--</div>
+                <div class="detail">Blocking -- one message at a time</div>
+            </div>
+            <div class="compare-cell right">
+                <div class="feature">Async Dispatch <span class="new-badge">New</span></div>
+                <div class="detail">Message classifier routes quick vs. long tasks. Long tasks get queued, ACK'd instantly, results polled and delivered async.</div>
+            </div>
+
+            <!-- Row: Telemetry -->
+            <div class="compare-cell left">
+                <div class="feature">--</div>
+                <div class="detail">No observability</div>
+            </div>
+            <div class="compare-cell right">
+                <div class="feature">JSONL Telemetry <span class="new-badge">New</span></div>
+                <div class="detail">7 event types: message_received, message_routed, agent_completed, tool_used, scheduled_task_executed, task_dispatched, error. Fed to Sky-Lynx for weekly analysis.</div>
+            </div>
+
+            <!-- Row: Security -->
+            <div class="compare-cell left">
+                <div class="feature">Chat ID Lock</div>
+                <div class="detail">Single-user by Telegram chat ID</div>
+            </div>
+            <div class="compare-cell right">
+                <div class="feature">Multi-layer Security <span class="enhanced-badge">Enhanced</span></div>
+                <div class="detail">Chat ID lock + env file protection (never expose ~/.env.shared) + Arcade auth gateway + non-negotiable security policy in persona</div>
+            </div>
+
+            <!-- Row: Process -->
+            <div class="compare-cell left">
+                <div class="feature">launchd Service</div>
+                <div class="detail">macOS background service via launchd plist</div>
+            </div>
+            <div class="compare-cell right">
+                <div class="feature">pm2 on Linux <span class="enhanced-badge">Enhanced</span></div>
+                <div class="detail">pm2 process manager with crash recovery, exponential backoff, production deployment on Linux workstation</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-label">System View</div>
+            <h2>Where Data Sits in ST Metro</h2>
+        </div>
+        <div class="arch-diagram"><span class="dim">Telegram (Matthew's Phone)</span>
+        |
+        v
+<span class="hl">EA-Claude (Data)</span> -- Chief of Staff
+   |-- <span class="am">Multi-LLM Router</span> ---> Claude | Gemini | Perplexity | Ollama | GPT
+   |-- <span class="or">Async Dispatch</span> ----> Classifier ---> Worker Queue
+   |     |-- Starscream (social media)
+   |     |-- Ravage (coding/GitHub)
+   |     '-- Soundwave (research/analysis)
+   |-- <span class="gr">Scheduler</span> ----------> Morning Report (0800) | Evening Review (1600)
+   |-- <span class="hl">Arcade MCP</span> ---------> Linear | GitHub | Slack
+   |-- <span class="am">Dashboard</span> ----------> Service Health | Git Status | Pipeline | Soundwave
+   '-- <span class="gr">Telemetry</span> ----------> JSONL ---> Sky-Lynx (weekly analysis)
+
+<span class="dim">Downstream Systems:</span>
+   IdeaForge <--signals-- Research Agents (Perplexity/Gemini/ChatGPT)
+      |
+      v
+   Ultra-Magnus (idea pipeline) ---> Metroplex (L5 build gate) ---> YCE Harness
+      |                                                                 |
+      v                                                                 v
+   ST Factory (metrics/patches) <------------ Sky-Lynx (observer) <-----'</div>
+    </section>
+
+    <!-- INTEGRATIONS -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-label">What Data Does</div>
+            <h2>Active Integrations & Task Types</h2>
+        </div>
+
+        <div class="integrations-grid">
+
+            <div class="integration-card">
+                <div class="card-header">
+                    <div class="icon icon-blue">&#9881;</div>
+                    <h3>Daily Operations</h3>
+                </div>
+                <div class="desc">Scheduled reports, system monitoring, pipeline tracking</div>
+                <ul class="tasks">
+                    <li>Morning briefing (0800) -- system health + git status + pipeline</li>
+                    <li>Evening review (1600) -- done/left/blockers recap</li>
+                    <li>Service health checks (pm2, systemd, ports)</li>
+                    <li>Git status across 10 repos</li>
+                    <li>Pipeline item tracking (PIPELINE.md)</li>
+                </ul>
+            </div>
+
+            <div class="integration-card">
+                <div class="card-header">
+                    <div class="icon icon-orange">&#9733;</div>
+                    <h3>Social Media (Starscream)</h3>
+                </div>
+                <div class="desc">Automated LinkedIn content with human-in-the-loop review</div>
+                <ul class="tasks">
+                    <li>M-F 1000 posting schedule (cron)</li>
+                    <li>AI image generation via HuggingFace</li>
+                    <li>Late API integration (13+ platforms)</li>
+                    <li>GitHub raw URL media hosting</li>
+                    <li>Voice guide style matching</li>
+                </ul>
+            </div>
+
+            <div class="integration-card">
+                <div class="card-header">
+                    <div class="icon icon-purple">&#128269;</div>
+                    <h3>Research & Analysis</h3>
+                </div>
+                <div class="desc">Multi-LLM research routing, competitive intelligence</div>
+                <ul class="tasks">
+                    <li>@perplexity routing for web research with citations</li>
+                    <li>@gemini routing for reasoning-heavy analysis</li>
+                    <li>Competition landscape reports (VigilAI, AI Grand Prix)</li>
+                    <li>Agent team reviews (architecture, concurrency, integration)</li>
+                    <li>Christensen filter on new ideas (JTBD, brand fit, focus)</li>
+                </ul>
+            </div>
+
+            <div class="integration-card">
+                <div class="card-header">
+                    <div class="icon icon-green">&#128187;</div>
+                    <h3>Development & DevOps</h3>
+                </div>
+                <div class="desc">Coding, git operations, infrastructure management</div>
+                <ul class="tasks">
+                    <li>Full Claude Code tool access (bash, file ops, web)</li>
+                    <li>Cross-project code changes (10 repos)</li>
+                    <li>GitHub PRs/issues via Arcade MCP</li>
+                    <li>Linear issue tracking via Arcade MCP</li>
+                    <li>pm2 and systemd service management</li>
+                    <li>SSH to Wheelie Nano (ROS2 robot)</li>
+                </ul>
+            </div>
+
+            <div class="integration-card">
+                <div class="card-header">
+                    <div class="icon icon-amber">&#128202;</div>
+                    <h3>Soundwave Dashboard</h3>
+                </div>
+                <div class="desc">Operator review panel reading from ST Factory data sources</div>
+                <ul class="tasks">
+                    <li>Sky-Lynx improvement recommendations</li>
+                    <li>Metroplex build queue status (pending/dispatched/failed)</li>
+                    <li>Persona patch review (ST Factory)</li>
+                    <li>High-quality research signals surfacing</li>
+                </ul>
+            </div>
+
+            <div class="integration-card">
+                <div class="card-header">
+                    <div class="icon icon-blue">&#128172;</div>
+                    <h3>Communication</h3>
+                </div>
+                <div class="desc">Multi-channel messaging and notifications</div>
+                <ul class="tasks">
+                    <li>Telegram (primary interface)</li>
+                    <li>Slack messaging via Arcade MCP</li>
+                    <li>Voice notes (STT + TTS)</li>
+                    <li>Email via Gmail MCP</li>
+                    <li>Context sharing via Perceptor (Claude Desktop sync)</li>
+                </ul>
+            </div>
+
+            <div class="integration-card">
+                <div class="card-header">
+                    <div class="icon icon-purple">&#128640;</div>
+                    <h3>Autonomous Pipeline</h3>
+                </div>
+                <div class="desc">L5 Dark Factory integration -- zero human gates</div>
+                <ul class="tasks">
+                    <li>Monitors IdeaForge signal intake</li>
+                    <li>Tracks Ultra-Magnus pipeline stages</li>
+                    <li>Observes Metroplex build dispatch</li>
+                    <li>Reports on YCE Harness build outcomes</li>
+                    <li>Feeds telemetry to Sky-Lynx improvement loop</li>
+                </ul>
+            </div>
+
+            <div class="integration-card">
+                <div class="card-header">
+                    <div class="icon icon-orange">&#128221;</div>
+                    <h3>Content & Deliverables</h3>
+                </div>
+                <div class="desc">Reports, presentations, proposals generated on demand</div>
+                <ul class="tasks">
+                    <li>HTML slide decks (ST Metro visual story)</li>
+                    <li>Competition intelligence reports</li>
+                    <li>SCM proposal decks</li>
+                    <li>Architecture documentation</li>
+                    <li>Blueprint and roadmap maintenance</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- BUILD TIMELINE -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-label">Build Log</div>
+            <h2>Development Timeline</h2>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date">Feb 22, 2026</div>
+                <div class="timeline-title">Fork & Foundation</div>
+                <div class="timeline-desc">Forked ClaudeClaw. Fixed setup wizard. Added multi-LLM routing (5 backends), security hardening, Arcade MCP gateway. Bot coordination via Linear.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Feb 22-23</div>
+                <div class="timeline-title">V1 Integration + Production Deploy</div>
+                <div class="timeline-desc">Cherry-picked upstream V1 features (video, retry logic). Removed OpenClaw dependency. Deployed via pm2 on Linux workstation.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Feb 23</div>
+                <div class="timeline-title">Telemetry & Observability</div>
+                <div class="timeline-desc">Added JSONL telemetry instrumentation (7 event types). Connected to Sky-Lynx weekly analysis pipeline.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Feb 24</div>
+                <div class="timeline-title">Starscream + Media Pipeline</div>
+                <div class="timeline-desc">Social media automation: HuggingFace image gen, GitHub media hosting, Late API integration, M-F posting schedule.</div>
+            </div>
+            <div class="timeline-item highlight">
+                <div class="timeline-date">Feb 25</div>
+                <div class="timeline-title">Data Dashboard v1</div>
+                <div class="timeline-desc">Built live dashboard: service health, 10-repo git status, pipeline tracker, Soundwave operator review (4 ST Factory data sources).</div>
+            </div>
+            <div class="timeline-item highlight">
+                <div class="timeline-date">Feb 25</div>
+                <div class="timeline-title">Async Dispatch Phase 1</div>
+                <div class="timeline-desc">Message classifier, dispatch queue, result poller. Long tasks run async with instant ACK and background delivery.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Feb 25-26</div>
+                <div class="timeline-title">Intelligence Reports</div>
+                <div class="timeline-desc">VigilAI competition report (AI Fight Club, AI Grand Prix, BVR Gym). Agent team architecture reviews. SCM proposal deck.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-label">By the Numbers</div>
+            <h2>Build Metrics</h2>
+        </div>
+
         <div class="stats-bar">
-            <div class="stat">
-                <div class="stat-value">17k+</div>
+            <div class="stat-box">
+                <div class="val">58</div>
+                <div class="stat-label">Files Changed</div>
+            </div>
+            <div class="stat-box">
+                <div class="val highlight">17,035</div>
                 <div class="stat-label">Lines Added</div>
             </div>
-            <div class="stat">
-                <div class="stat-value">15</div>
-                <div class="stat-label">New Modules</div>
+            <div class="stat-box">
+                <div class="val amber">137</div>
+                <div class="stat-label">Lines Removed</div>
             </div>
-            <div class="stat">
-                <div class="stat-value">5</div>
-                <div class="stat-label">LLM Backends</div>
+            <div class="stat-box">
+                <div class="val green">5</div>
+                <div class="stat-label">Days Elapsed</div>
             </div>
-            <div class="stat">
-                <div class="stat-value">16</div>
-                <div class="stat-label">Integrations</div>
+            <div class="stat-box">
+                <div class="val">29</div>
+                <div class="stat-label">Original Files</div>
             </div>
-        </div>
-
-        <!-- Side-by-Side Comparison -->
-        <div class="section-header">
-            <h2>Original vs. Extended</h2>
-            <div class="section-sub">ClaudeClaw base repo (618230f) vs. EA-Claude current state</div>
-        </div>
-
-        <div class="comparison">
-            <div class="col-card original">
-                <h3>ClaudeClaw -- Original</h3>
-                <ul>
-                    <li><span class="icon">&#9679;</span><div>Telegram bot (grammy)<span class="detail">Single-chat, single-LLM message handling</span></div></li>
-                    <li><span class="icon">&#9679;</span><div>Claude Code agent<span class="detail">Blocking subprocess execution via CLI</span></div></li>
-                    <li><span class="icon">&#9679;</span><div>SQLite persistence<span class="detail">Sessions, memories, scheduled tasks</span></div></li>
-                    <li><span class="icon">&#9679;</span><div>Voice transcription &amp; synthesis<span class="detail">Whisper transcription, OpenAI TTS</span></div></li>
-                    <li><span class="icon">&#9679;</span><div>Media handling<span class="detail">Photos, documents, video receive</span></div></li>
-                    <li><span class="icon">&#9679;</span><div>Scheduled tasks<span class="detail">Cron-based prompt execution</span></div></li>
-                    <li><span class="icon">&#9679;</span><div>Setup wizard<span class="detail">Interactive env config + Telegram verification</span></div></li>
-                    <li><span class="icon">&#9679;</span><div>Test suite<span class="detail">Vitest -- bot, db, env, media, memory, voice</span></div></li>
-                </ul>
-            </div>
-
-            <div class="col-card added">
-                <h3>EA-Claude -- Added</h3>
-                <ul>
-                    <li><span class="icon">+</span><div>Multi-LLM routing<span class="detail">@gemini, @perplexity, @ollama, @gpt prefix dispatch</span></div></li>
-                    <li><span class="icon">+</span><div>Message classifier<span class="detail">Quick vs. long task routing with worker type detection</span></div></li>
-                    <li><span class="icon">+</span><div>Async dispatch queue<span class="detail">Non-blocking long tasks, result polling, named workers</span></div></li>
-                    <li><span class="icon">+</span><div>Arcade MCP gateway<span class="detail">Linear, GitHub, Slack tools via stdio bridge</span></div></li>
-                    <li><span class="icon">+</span><div>JSONL telemetry<span class="detail">Event stream consumed by Sky-Lynx + ST Factory</span></div></li>
-                    <li><span class="icon">+</span><div>Data Dashboard<span class="detail">Live HTML dashboard: services, git, pipeline, Soundwave</span></div></li>
-                    <li><span class="icon">+</span><div>Soundwave integration<span class="detail">ST Factory recs, Metroplex queue, patches, signals</span></div></li>
-                    <li><span class="icon">+</span><div>Starscream media pipeline<span class="detail">HF image gen, GitHub hosting, social posting</span></div></li>
-                    <li><span class="icon">+</span><div>Christensen filter<span class="detail">Challenger mode gate on new ideas before execution</span></div></li>
-                    <li><span class="icon">+</span><div>Chief of Staff persona<span class="detail">Personality, security policy, special commands</span></div></li>
-                    <li><span class="icon">+</span><div>API retry logic<span class="detail">529/503 overload handling with exponential backoff</span></div></li>
-                    <li><span class="icon">+</span><div>PM2 process management<span class="detail">ecosystem.config.cjs for production daemon</span></div></li>
-                </ul>
+            <div class="stat-box">
+                <div class="val green">30+</div>
+                <div class="stat-label">New Files</div>
             </div>
         </div>
+    </section>
 
-        <!-- Architecture -->
-        <div class="section-header">
-            <h2>Architecture</h2>
-            <div class="section-sub">Message flow from Telegram through routing, classification, and dispatch</div>
-        </div>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>EA-Claude (Data) -- M2AI Chief of Staff</p>
+        <p style="margin-top: 0.5rem;">
+            Built on <a href="https://github.com/MarkKashef/claudeclaw" target="_blank">ClaudeClaw</a> by Mark Kashef
+            | Extended by M2AI | Feb 2026
+        </p>
+        <p style="margin-top: 0.3rem; color: var(--text-dim);">
+            See also: <a href="st-metro-visual-story.html">ST Metro: The Dark Factory</a>
+        </p>
+    </footer>
 
-        <div class="arch-box">
-            <pre>
-  <span class="hl">Telegram</span>                        <span class="hlw">LLM Backends</span>
-     |                               |
-     v                          <span class="hlw">Gemini  Perplexity</span>
-  <span class="hl">bot.ts</span> ------@prefix?------> <span class="hlw">router.ts</span> ----> <span class="hlw">Ollama  GPT</span>
-     |              |
-     |         no prefix
-     v              |
-  <span class="hl">classifier.ts</span>     |          <span class="hlo">Arcade MCP</span>
-     |              |          <span class="hlo">  Linear</span>
-  quick?  long?     |          <span class="hlo">  GitHub</span>
-     |       |      |          <span class="hlo">  Slack</span>
-     v       v      |              |
-  <span class="hlg">inline</span>   <span class="hlg">dispatch</span>   |              |
-  <span class="hlg">agent</span>   <span class="hlg">queue</span> <----+--- <span class="hl">agent.ts</span> --+--- <span class="hl">Claude Code</span>
-                    |              |
-                    |         <span class="hlg">telemetry.ts</span>
-                    |              |
-                    v              v
-               <span class="hlg">result</span>        <span class="hlg">store/</span>
-               <span class="hlg">poller</span>       <span class="hlg">telemetry.jsonl</span>
-                    |
-                    v
-               <span class="hl">Telegram</span>
-            </pre>
-        </div>
+</div>
 
-        <!-- New Modules -->
-        <div class="section-header">
-            <h2>New Source Modules</h2>
-            <div class="section-sub">Files added to src/ and dashboard/ beyond the original ClaudeClaw codebase</div>
-        </div>
-
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="card-header">
-                    <div class="card-icon icon-bg-blue">R</div>
-                    <h4>router.ts</h4>
-                </div>
-                <p>Multi-LLM message router. Parses @prefix syntax and dispatches to the right backend. Default routes to Claude Code.</p>
-                <span class="tag live">Live</span>
-            </div>
-            <div class="feature-card">
-                <div class="card-header">
-                    <div class="card-icon icon-bg-blue">L</div>
-                    <h4>llm-backends.ts</h4>
-                </div>
-                <p>HTTP client implementations for Gemini, Perplexity, Ollama (local), and OpenAI. Shared JSON request helper.</p>
-                <span class="tag live">Live</span>
-            </div>
-            <div class="feature-card">
-                <div class="card-header">
-                    <div class="card-icon icon-bg-green">C</div>
-                    <h4>classifier.ts</h4>
-                </div>
-                <p>Three-tier message classification: quick patterns, long indicators, worker routing (Starscream, Ravage, Soundwave).</p>
-                <span class="tag built">Built</span>
-            </div>
-            <div class="feature-card">
-                <div class="card-header">
-                    <div class="card-icon icon-bg-green">P</div>
-                    <h4>result-poller.ts</h4>
-                </div>
-                <p>10-second interval poller for completed async tasks. Sends results back to the user via Telegram with worker labels.</p>
-                <span class="tag built">Built</span>
-            </div>
-            <div class="feature-card">
-                <div class="card-header">
-                    <div class="card-icon icon-bg-amber">A</div>
-                    <h4>arcade-config.ts</h4>
-                </div>
-                <p>Arcade MCP gateway config. Bridges HTTP to stdio for Linear, GitHub, and Slack tool access inside Claude Code sessions.</p>
-                <span class="tag live">Live</span>
-            </div>
-            <div class="feature-card">
-                <div class="card-header">
-                    <div class="card-icon icon-bg-indigo">T</div>
-                    <h4>telemetry.ts</h4>
-                </div>
-                <p>JSONL event stream: messages received, routes taken, agent completions, tool usage. Consumed by Sky-Lynx and ST Factory.</p>
-                <span class="tag live">Live</span>
-            </div>
-            <div class="feature-card">
-                <div class="card-header">
-                    <div class="card-icon icon-bg-highlight">D</div>
-                    <h4>dashboard/</h4>
-                </div>
-                <p>Python report generator + HTML dashboard. Reads git status, service health, pipeline, Soundwave data, and Metroplex queue.</p>
-                <span class="tag live">Live</span>
-            </div>
-            <div class="feature-card">
-                <div class="card-header">
-                    <div class="card-icon icon-bg-highlight">S</div>
-                    <h4>Soundwave Section</h4>
-                </div>
-                <p>Dashboard module reading 4 ST Factory sources: improvement recs, Metroplex priority queue, persona patches, research signals.</p>
-                <span class="tag live">Live</span>
-            </div>
-        </div>
-
-        <!-- Tech Stack -->
-        <div class="section-header">
-            <h2>Tech Stack</h2>
-        </div>
-        <div class="tech-row">
-            <span class="tech-badge">TypeScript</span>
-            <span class="tech-badge">Node.js 18+</span>
-            <span class="tech-badge">grammy</span>
-            <span class="tech-badge">better-sqlite3</span>
-            <span class="tech-badge">PM2</span>
-            <span class="tech-badge">Python 3.11+</span>
-            <span class="tech-badge">Claude Code CLI</span>
-            <span class="tech-badge">Gemini API</span>
-            <span class="tech-badge">Perplexity API</span>
-            <span class="tech-badge">Ollama (local)</span>
-            <span class="tech-badge">Arcade MCP</span>
-            <span class="tech-badge">HuggingFace Inference</span>
-            <span class="tech-badge">Late API</span>
-            <span class="tech-badge">Vitest</span>
-        </div>
-
-        <!-- Integrations / Tasks -->
-        <div class="section-header">
-            <h2>What Data Handles</h2>
-            <div class="section-sub">All the tasks and systems Data is currently integrated into</div>
-        </div>
-
-        <div class="integration-list">
-            <div class="integration-item">
-                <div class="int-icon">&#x1F4CA;</div>
-                <div class="int-text">
-                    <h5>Morning &amp; Evening Reports</h5>
-                    <p>Scheduled briefings: service health, git status, pipeline items, blockers</p>
-                </div>
-            </div>
-            <div class="integration-item">
-                <div class="int-icon">&#x1F4E3;</div>
-                <div class="int-text">
-                    <h5>Starscream -- Social Media</h5>
-                    <p>LinkedIn posting via Late API, HF image gen, GitHub media hosting, M-F schedule</p>
-                </div>
-            </div>
-            <div class="integration-item">
-                <div class="int-icon">&#x1F4E1;</div>
-                <div class="int-text">
-                    <h5>Soundwave -- ST Factory Monitor</h5>
-                    <p>Surfaces Sky-Lynx recommendations, persona patches, research signals, Metroplex queue</p>
-                </div>
-            </div>
-            <div class="integration-item">
-                <div class="int-icon">&#x1F916;</div>
-                <div class="int-text">
-                    <h5>Multi-LLM Research Routing</h5>
-                    <p>@perplexity for web research, @gemini for reasoning, @ollama for private queries</p>
-                </div>
-            </div>
-            <div class="integration-item">
-                <div class="int-icon">&#x1F4CB;</div>
-                <div class="int-text">
-                    <h5>Linear Issue Tracking</h5>
-                    <p>Create, update, transition issues and manage sprints via Arcade MCP</p>
-                </div>
-            </div>
-            <div class="integration-item">
-                <div class="int-icon">&#x1F4BB;</div>
-                <div class="int-text">
-                    <h5>GitHub Operations</h5>
-                    <p>PRs, commits, file ops, repo management across m2ai-portfolio and MatthewSnow2 orgs</p>
-                </div>
-            </div>
-            <div class="integration-item">
-                <div class="int-icon">&#x1F4AC;</div>
-                <div class="int-text">
-                    <h5>Slack Notifications</h5>
-                    <p>Read channels, send messages, manage workspace comms via Arcade MCP</p>
-                </div>
-            </div>
-            <div class="integration-item">
-                <div class="int-icon">&#x1F3ED;</div>
-                <div class="int-text">
-                    <h5>Metroplex Queue Monitoring</h5>
-                    <p>Track autonomous build pipeline: pending, dispatched, completed, failed items</p>
-                </div>
-            </div>
-            <div class="integration-item">
-                <div class="int-icon">&#x1F4A1;</div>
-                <div class="int-text">
-                    <h5>Pipeline Tracking</h5>
-                    <p>PIPELINE.md maintenance: priorities, status updates, unfinished business surfacing</p>
-                </div>
-            </div>
-            <div class="integration-item">
-                <div class="int-icon">&#x1F3AF;</div>
-                <div class="int-text">
-                    <h5>Christensen Filter</h5>
-                    <p>Idea gate: "What job does this hire for?" before spinning up new projects</p>
-                </div>
-            </div>
-            <div class="integration-item">
-                <div class="int-icon">&#x1F399;</div>
-                <div class="int-text">
-                    <h5>Voice Messages</h5>
-                    <p>Telegram voice note transcription, text-to-speech response synthesis</p>
-                </div>
-            </div>
-            <div class="integration-item">
-                <div class="int-icon">&#x1F4C5;</div>
-                <div class="int-text">
-                    <h5>Task Scheduling</h5>
-                    <p>Cron-based prompt execution with status tracking and result logging</p>
-                </div>
-            </div>
-            <div class="integration-item">
-                <div class="int-icon">&#x1F50D;</div>
-                <div class="int-text">
-                    <h5>Context Recovery</h5>
-                    <p>Perceptor contexts, session memories, checkpoint/resume across conversations</p>
-                </div>
-            </div>
-            <div class="integration-item">
-                <div class="int-icon">&#x1F4C8;</div>
-                <div class="int-text">
-                    <h5>Telemetry Pipeline</h5>
-                    <p>JSONL event stream feeding Sky-Lynx analysis and ST Factory metrics</p>
-                </div>
-            </div>
-            <div class="integration-item">
-                <div class="int-icon">&#x1F6E1;</div>
-                <div class="int-text">
-                    <h5>Security Enforcement</h5>
-                    <p>Secret redaction, env file protection, credential leak prevention in responses</p>
-                </div>
-            </div>
-            <div class="integration-item">
-                <div class="int-icon">&#x2708;</div>
-                <div class="int-text">
-                    <h5>VigilAI Competition Intel</h5>
-                    <p>Competition landscape reports, eligibility analysis, strategy tracking</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <p>EA-Claude (Data) -- M2AI / ClaudeClaw fork -- February 2026</p>
-            <p style="margin-top: 0.5rem;"><a href="https://github.com/MatthewSnow2/social-media-assets/blob/main/st-metro-visual-story.html">ST Metro Visual Story</a></p>
-        </div>
-
-    </div>
 </body>
 </html>
